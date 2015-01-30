@@ -1,4 +1,4 @@
-# angular-carousel.js 1.0.2
+# angular-carousel.js 1.1.0
 
 A simple very generic AngularJS carousel. Features:
 
@@ -37,6 +37,9 @@ Just use `ng-carousel` to initiate a carousel. Give it a unique name with `ng-ca
     </div>
 
 You can put anything you want in de slides. The slides fit perfectly inside the ng-carousel element, which is 300px by default. You can easily overwrite it using CSS.
+
+#### If the slides are being generated (for example with `ng-repeat`)
+You should let ng-carousel know when your scope changes. To do so, just pass your changing scope variable through the attribute `ng-carousel-watch="yourChangingScopeVariable"`.
 
 
 ### Optional: control the carousel with inside buttons

@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.0.2
+ * @license AngularJS v1.1.0
  * (c) 2015 Lifely
  * License: MIT
  */
@@ -53,6 +53,13 @@ angular.module('angular-carousel', [])
     };
 
     //
+    // Remove a carousel
+    //
+    Carousel.remove = function(name) {
+        delete Carousel.instances[name];
+    };
+
+    //
     // Carousel prototype definition
     //
     var constructor = function(slidesCount, scope) {
@@ -75,10 +82,10 @@ angular.module('angular-carousel', [])
                 }
             });
 
-            // If the scope is not currently updating, trigger one update
-            if(!scope.$$phase) {
+            // If the scope is not currently updating, trigger one update using a timeout of zero
+            setTimeout(function() {
                 scope.$apply();
-            }
+            }, 0);
         };
 
         // Operation: to next slide
@@ -139,30 +146,130 @@ angular.module('angular-carousel', [])
 
     return {
         restrict: 'AE',
+        replace: true,
+        scope: {
+            ngCarouselWatch: '='
+        },
         link: function(scope, element, attrs) {
 
-            element.addClass('ng-carousel');
-
-            element.addClass(isTouchDevice() ? 'touch' : 'no-touch');
-
-            // Create carousel instance
-            var slides = element.find('slide');
-            var currentCarousel = Carousel.add(slides.length, attrs.ngCarouselName, scope);
-
-            // Find slide wrapper
-            var slideContainer = element.find('slidecontainer');
-
-            // Add slides before and after the current slides
-            var firstSlideCopy = $compile(slides[0].outerHTML)(scope);
-            var lastSlideCopy = $compile(slides[slides.length - 1].outerHTML)(scope);
-            slideContainer.append(firstSlideCopy);
-            slideContainer.prepend(lastSlideCopy);
-            slideContainer.addClass('carousel-ignore-first-slide');
-
             // Options
-            var interval = false, timeoutPromise = false, random = false;
+            var interval = false, timeoutPromise = false, random = false, name = '';
             interval = typeof(attrs.ngCarouselTimer) !== 'undefined' && parseInt(attrs.ngCarouselTimer, 10) > 0 ? parseInt(attrs.ngCarouselTimer, 10) : false;
             random = typeof(attrs.ngCarouselRandom) !== 'undefined';
+
+            // Function to initialize interaction with dom (should be loaded after the dom has changed)
+            var slides, currentCarousel, firstSlideCopy, lastSlideCopy, slideContainer, hammer, name;
+            var refreshInteractionWithDom = function() {
+
+                // Add initial classes
+                element.addClass('ng-carousel');
+                element.addClass(isTouchDevice() ? 'carousel-touch' : 'carousel-no-touch');
+
+                // Find slide wrapper
+                slideContainer = element.find('slidecontainer');
+
+                // Remove old carousel
+                var savedSlideIndex = false;
+                var savedCallbacks = false;
+                if(name) {
+                    savedSlideIndex = Carousel.get(name).currentSlide;
+                    savedCallbacks = Carousel.get(name).onSlideChangeCallbacks;
+                    Carousel.remove(name);
+                }
+
+                // Remove old duplicated slides
+                var removeOldVirtualSlides = function() {
+                    var oldSlides = angular.element(element[0].querySelectorAll('.carousel-slide-copy'));
+                    if(oldSlides.length > 0) oldSlides.remove();
+                };
+
+                // Find slides
+                removeOldVirtualSlides();
+                slides = element.find('slide');
+
+                // Add slides before and after the current slides
+                if(slides.length > 0) {
+
+                    // Create new carousel and duplicate slides
+                    name = attrs.ngCarouselName;
+                    currentCarousel = Carousel.add(slides.length, attrs.ngCarouselName, scope);
+                    angular.forEach(savedCallbacks, function(savedCallback) {
+                        currentCarousel.onSlideChange(savedCallback);
+                        currentCarousel.unbindOnSlideChangeCallback(0);
+                    });
+
+                    // Duplicate first and last slide (for infinite effect)
+                    var refreshVirtualSlides = function() {
+                        removeOldVirtualSlides();
+                        slides = element.find('slide');
+                        firstSlideCopy = angular.element(slides[0].outerHTML);
+                        lastSlideCopy = angular.element(slides[slides.length - 1].outerHTML);
+                        firstSlideCopy.addClass('carousel-slide-copy');
+                        lastSlideCopy.addClass('carousel-slide-copy');
+                        slideContainer.append(firstSlideCopy);
+                        slideContainer.prepend(lastSlideCopy);
+                        slideContainer.addClass('carousel-ignore-first-slide');
+                    };
+
+                    refreshVirtualSlides();
+
+                    // On slide change, move the slideContainer
+                    var onSlideChangeCallback = function(slideIndex, wrapping) {
+                        var newSlideIndex = slideIndex + 1; // because the first slide doesn't count
+
+                        if(wrapping === 'left') {
+                            newSlideIndex = 0; // first slide
+                        } else if(wrapping === 'right') {
+                            newSlideIndex = slides.length + 1; // last slide
+                        }
+
+                        move(newSlideIndex, true, function() {
+                            if(wrapping === 'left') {
+                                move(slides.length, false);
+                            } else if(wrapping === 'right') {
+                                move(1, false);
+                            }
+                        });
+
+                        setNextSlideTimeout();
+                        refreshVirtualSlides();
+                    };
+                    currentCarousel.onSlideChange(onSlideChangeCallback);
+
+                    // If new slide was out of range, move to the new assigned one
+                    if(savedSlideIndex !== false && currentCarousel.currentSlide !== savedSlideIndex) {
+                        onSlideChangeCallback(currentCarousel.currentSlide, false);
+                        currentCarousel.toIndex(savedSlideIndex);
+                    }
+
+                    // Option: random
+                    if(random) {
+                        var randomSlide = Math.floor(Math.random() * currentCarousel.slidesCount);
+                        currentCarousel.toIndex(randomSlide);
+                    }
+
+                    // Option: interval
+                    if(interval) {
+                        setNextSlideTimeout();
+                    }
+                } else {
+                    console.log('ng-carousel error: No slides found')
+                }
+
+                // Initialize Hammer
+                if(slideContainer[0]) {
+                    hammer = new Hammer.Manager(slideContainer[0]);
+                    hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 0 }));
+
+                    // On pan left/right
+                    hammer.on("panleft panright", function(ev) {
+                        if(!ev.isFinal) carouselDrag(ev.deltaX);
+                    });
+                } else {
+                    console.log('ng-carousel error: No slidecontainer found')
+                }
+
+            };
 
             // Reset interval function
             var setNextSlideTimeout = function() {
@@ -191,34 +298,13 @@ angular.module('angular-carousel', [])
                 });
 
                 if(animate) {
-                    slideContainer.bind('transitionend oTransitionEnd webkitTransitionEnd', function() {
+                    slideContainer.on('transitionend oTransitionEnd webkitTransitionEnd', function() {
                         if(typeof transitionEndCallback === 'function') transitionEndCallback();
-                        slideContainer.unbind('transitionend oTransitionEnd webkitTransitionEnd');
+                        slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
                         move(currentCarousel.currentSlide + 1, false);
                     });
                 }
             };
-
-            // On slide change, move the slideContainer
-            currentCarousel.onSlideChange(function(slideIndex, wrapping) {
-                var newSlideIndex = slideIndex + 1; // because the first slide doesn't count
-
-                if(wrapping === 'left') {
-                    newSlideIndex = 0; // first slide
-                } else if(wrapping === 'right') {
-                    newSlideIndex = slides.length + 1; // last slide
-                }
-
-                move(newSlideIndex, true, function() {
-                    if(wrapping === 'left') {
-                        move(slides.length, false);
-                    } else if(wrapping === 'right') {
-                        move(1, false);
-                    }
-                });
-
-                setNextSlideTimeout();
-            });
 
             // Make the carousel draggable (either with touch or with mouse)
             var deltaXFactor = 0,
@@ -246,40 +332,40 @@ angular.module('angular-carousel', [])
                 }
             };
 
-            // Initialize Hammer
-            var hammer = new Hammer.Manager(slideContainer[0]);
-            hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 0 }));
-
-            // On pan left/right
-            hammer.on("panleft panright", function(ev) {
-                if(!ev.isFinal) carouselDrag(ev.deltaX);
-            });
-
             // On release
             var pressEvent = isTouchDevice() ? 'touchstart' : 'mousedown';
             var releaseEvent = isTouchDevice() ? 'touchend' : 'mouseup';
             $document.on(pressEvent, carouselPress);
             $document.on(releaseEvent, carouselRelease);
 
-            // Option: random
-            if(random) {
-                var randomSlide = Math.floor(Math.random() * currentCarousel.slidesCount);
-                currentCarousel.toIndex(randomSlide);
-            }
-
-            // Option: interval
-            if(interval) {
-                setNextSlideTimeout();
-            }
-
+            //
             element.on('mouseover', function() {
                 if(timeoutPromise) $timeout.cancel(timeoutPromise);
             });
             element.on('mouseout', setNextSlideTimeout);
 
+            // Events to refresh the dom selectors
+            var refreshInteractionWithDomTimer = $timeout(refreshInteractionWithDom, 0);
+            if(typeof(attrs.ngCarouselWatch) !== 'undefined') {
+                scope.$watch('ngCarouselWatch', function() {
+
+                    // Wait for angular compile to complete
+                    $timeout(refreshInteractionWithDom);
+
+                }, true);
+            }
+
+            // Destroy all binded events on scope destroy
+            scope.$on('$destroy', function() {
+                $timeout.cancel(refreshInteractionWithDomTimer);
+                element.off('mouseover mouseout');
+                $document.off(pressEvent);
+                $document.off(releaseEvent);
+                slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
+                currentCarousel.onSlideChangeCallbacks = [];
+                Carousel.remove(name);
+            });
+
         }
     };
-}])
-
-// The end
-;
+}]);
