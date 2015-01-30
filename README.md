@@ -9,6 +9,8 @@ A simple very generic AngularJS carousel. Features:
 - Select the carousel by name (using the Carousel service) and control the carousel
 - Print out the current slide of a selected carousel
 
+See the [demo here](http://htmlpreview.github.io/?https://raw.githubusercontent.com/lifelynl/angular-carousel/master/examples/demo.html "demo")
+
 ## How to use
 
 ### Step 1: include the files
