@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="demoApp">
+<head>
+    <meta charset="UTF-8">
+    <title>angular-carousel.js</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="demo.css">
+    <link rel="stylesheet" href="../angular-carousel.min.css">
+</head>
+<body>
+    
+    <article ng-controller="DemoCtrl">
+
+        <header>
+            <h1>angular-carousel.js</h1>
+        </header>
+
+        <section>
+            <h2>Simple example (drag to slide)</h2>
+            <div ng-carousel ng-carousel-name="example-carousel1">
+                <slidecontainer class="carousel-slides">
+                    <slide class="carousel-example">Slide 1</slide>
+                    <slide class="carousel-example">Slide 2</slide>
+                    <slide class="carousel-example">Slide 3</slide>
+                    <slide class="carousel-example">Slide 4</slide>
+                    <slide class="carousel-example">Slide 5</slide>
+                    <slide class="carousel-example">Slide 6</slide>
+                </slidecontainer>
+            </div>
+        </section>
+    
+        <section>
+            <h2>Control the upper carousel</h2>
+            <p>
+                <button ng-click="Carousel.get('example-carousel1').previous()">previous slide</button>
+                <button ng-click="Carousel.get('example-carousel1').next()">next slide</button>
+                <button ng-click="Carousel.get('example-carousel1').toIndex(2)">to slide 3</button>
+            </p>
+        </section>
+
+    <section>
+            <h2>Read the upper carousel</h2>
+            <p>
+                The current slide is {{ Carousel.get('example-carousel1').currentSlide }}<br>
+                The total amount of slides is {{ Carousel.get('example-carousel1').slidesCount }}
+            </p>
+        </section>
+
+        <section>
+            <h2>Carousel with inner navigation buttons</h2>
+            <div ng-carousel ng-carousel-name="example-carousel2">
+                <slidecontainer class="carousel-slides">
+                    <slide class="carousel-example">Slide 1</slide>
+                    <slide class="carousel-example">Slide 2</slide>
+                    <slide class="carousel-example">Slide 3</slide>
+                    <slide class="carousel-example">Slide 4</slide>
+                </slidecontainer>
+                <div class="carousel-arrow carousel-arrow-left">
+                    <button class="demo-nav" ng-click="Carousel.get('example-carousel2').previous()">back</button>
+                </div>
+                <div class="carousel-arrow carousel-arrow-right">
+                    <button class="demo-nav" ng-click="Carousel.get('example-carousel2').next()">forth</button>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Carousel with random start point</h2>
+            <div ng-carousel ng-carousel-name="example-carousel3" ng-carousel-random>
+                <slidecontainer class="carousel-slides">
+                    <slide class="carousel-example">Slide 1</slide>
+                    <slide class="carousel-example">Slide 2</slide>
+                    <slide class="carousel-example">Slide 3</slide>
+                    <slide class="carousel-example">Slide 4</slide>
+                </slidecontainer>
+            </div>
+        </section>
+
+        <section>
+            <h2>Carousel with timer (cancels on mouseover)</h2>
+            <div ng-carousel ng-carousel-name="example-carousel4" ng-carousel-timer="1000">
+                <slidecontainer class="carousel-slides">
+                    <slide class="carousel-example">Slide 1</slide>
+                    <slide class="carousel-example">Slide 2</slide>
+                    <slide class="carousel-example">Slide 3</slide>
+                    <slide class="carousel-example">Slide 4</slide>
+                </slidecontainer>
+            </div>
+        </section>
+
+    </article>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
+    <script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
+
+    <script src="../angular-carousel.min.js"></script>
+    <script src="demo.js"></script>
+</body>
+</html>

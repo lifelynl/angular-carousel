@@ -1,0 +1,35 @@
+body {
+    font-family: sans-serif;
+    padding: 50px;
+}
+
+section {
+    margin-bottom: 50px;
+}
+
+h1 {
+    font-size: 34px;
+    font-weight: bold;
+    margin-bottom: 50px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+}
+
+h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+button {
+    font-size: 16px;
+    border-radius: 3px;
+    border: none;
+    background: #333;
+    padding: 5px 10px;
+    color: #eee;
+}
+
+button.demo-nav {
+    margin-top: 130px;
+}
