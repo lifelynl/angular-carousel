@@ -35,49 +35,22 @@
   font-size: 16px;
   width: 100%;
   height: 100%;
-  color: white;
   -webkit-background-size: cover;
   background-size: cover;
   background-position: center;
-}
-.ng-carousel slide.carousel-example {
-  background-color: #999;
-  text-align: center;
-  font-size: 148px;
-  line-height: 300px;
-  color: #bbb;
-}
-.ng-carousel slide.carousel-example:nth-child(odd) {
-  background-color: #aaa;
-  color: #ccc;
 }
 .ng-carousel .carousel-arrow {
   display: inline-block;
   position: absolute;
   top: 0;
   bottom: 0;
-  z-index: 2;
+  z-index: 1;
   width: 100px;
   text-align: center;
-  color: transparent;
-  -webkit-transition: color 0.2s ease-in-out 0s;
-  -moz-transition: color 0.2s ease-in-out 0s;
-  -o-transition: color 0.2s ease-in-out 0s;
-  transition: color 0.2s ease-in-out 0s;
 }
 .ng-carousel .carousel-arrow.carousel-arrow-left {
   left: 0;
 }
 .ng-carousel .carousel-arrow.carousel-arrow-right {
   right: 0;
-}
-.ng-carousel.touch .carousel-arrow,
-.ng-carousel:hover .carousel-arrow {
-  color: rgba(255, 255, 255, 0.5);
-}
-.ng-carousel.touch .carousel-arrow:focus,
-.ng-carousel:hover .carousel-arrow:focus,
-.ng-carousel.touch .carousel-arrow:hover,
-.ng-carousel:hover .carousel-arrow:hover {
-  color: white;
 }

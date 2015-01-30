@@ -33,3 +33,16 @@ button {
 button.demo-nav {
     margin-top: 130px;
 }
+
+.ng-carousel slide {
+    background-color: #999;
+    text-align: center;
+    font-size: 148px;
+    line-height: 300px;
+    color: #bbb;
+}
+
+.ng-carousel slide:nth-child(odd) {
+  background-color: #aaa;
+  color: #ccc;
+}
