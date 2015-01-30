@@ -13,13 +13,14 @@ See the [demo here](http://htmlpreview.github.io/?https://raw.githubusercontent.
 
 ## How to use
 
-### Step 1: include the files
-You will need to include:
+### Step 1: install this package (Bower)
 
-- *angularjs* (will be installed by Bower)
-- *hammerjs* (will also be installed by Bower)
-- *angular-carousel.js* (or angular-carousel.min.js)
-- *angular-carousel.css* (or angular-carousel.min.css)
+`bower install lifely-angular-carousel`
+
+There other dependencies are required:
+
+- *AngularJS >= 1.2.3*
+- *HammerJS >= 2.0.4*
 
 ### Step 2: write the html
 Just use `ng-carousel` to initiate a carousel. Give it a unique name with `ng-carousel-name`.
