@@ -1,5 +1,5 @@
 /*
- * angular-carousel.js - v1.0.0 - 2014-01-30
+ * angular-carousel.js - v1.0.1 - 2014-01-30
  * Copyright (c) 2014 Lifely
  * All right reserved
  *
