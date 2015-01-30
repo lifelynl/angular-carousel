@@ -1,0 +1,22 @@
+{
+  "name": "angular-carousel",
+  "description": "Touch-optimized carousel for Angular",
+  "version": "1.0.0",
+  "keywords": [
+    "carousel",
+    "angular",
+    "javascript",
+    "touch",
+    "responsive",
+    "front-end",
+    "web"
+  ],
+  "main": [
+    "angular-carousel.js",
+    "angular-carousel.css"
+  ],
+  "dependencies": {
+    "angular": ">= 1.2.3",
+    "hammerjs": ">= 2.0.4"
+  }
+}

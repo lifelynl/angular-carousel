@@ -1,1 +1,81 @@
-# angular-carousel.js
+# angular-carousel.js 1.0.0
+
+A simple very generic AngularJS carousel. Features:
+
+- Touch optimized (swipe to move between the slides)
+- Looping
+- Timer (optional)
+- Random start (optional)
+- Select the carousel by name (using the Carousel service) and control the carousel
+- Print out the current slide of a selected carousel
+
+## How to use
+
+### Step 1: include the files
+You will need to include:
+
+- *angularjs* (will be installed by Bower)
+- *hammerjs* (will also be installed by Bower)
+- *angular-carousel.js* (or angular-carousel.min.js)
+- *angular-carousel.css* (or angular-carousel.min.css)
+
+### Step 2: write the html
+Just use `ng-carousel` to initiate a carousel. Give it a unique name with `ng-carousel-name`.
+
+    <div ng-carousel ng-carousel-name="example-carousel1">
+        <slidecontainer class="carousel-slides">
+            <slide class="carousel-example">Slide 1</slide>
+            <slide class="carousel-example">Slide 2</slide>
+            <slide class="carousel-example">Slide 3</slide>
+            <slide class="carousel-example">Slide 4</slide>
+            <slide class="carousel-example">Slide 5</slide>
+            <slide class="carousel-example">Slide 6</slide>
+        </slidecontainer>
+    </div>
+
+You can put anything you want in de slides. The slides fit perfectly inside the ng-carousel element, which is 300px by default. You can easily overwrite it using CSS.
+
+
+### Optional: control the carousel with inside buttons
+You can place anything inside the *.carousel-arrow* elements. These are positioned left and right and have a width of 100px by default. You also can overwrite this using CSS.
+
+    <div ng-carousel ng-carousel-name="example-carousel2">
+        <slidecontainer class="carousel-slides">
+            <slide class="carousel-example">Slide 1</slide>
+            <slide class="carousel-example">Slide 2</slide>
+            <slide class="carousel-example">Slide 3</slide>
+            <slide class="carousel-example">Slide 4</slide>
+            <slide class="carousel-example">Slide 5</slide>
+            <slide class="carousel-example">Slide 6</slide>
+        </slidecontainer>
+        <div class="carousel-arrow carousel-arrow-left">
+            <button ng-click="Carousel.get('example-carousel2').previous()">back</button>
+        </div>
+        <div class="carousel-arrow carousel-arrow-right">
+            <button ng-click="Carousel.get('example-carousel2').next()">forth</button>
+        </div>
+    </div>
+
+
+### Optional: control the carousel from another place in the code
+You can control the carousel using the `Carousel` service.
+
+- Select and save a carousel using `var myCarousel = Carousel.get('carousel-example3')`
+- Read-only variables of myCarousel are now:
+    - `myCarousel.currentSlide` - the active slide of your myCarousel
+    - `myCarousel.slidesCount` - the total count of slides inside myCarousel
+- Control the carousel:
+    - `myCarousel.previous()` - go to the previous slide
+    - `myCarousel.next()` - go to the next slide
+    - `myCarousel.toIndex(n)` - go to a specific slide (starting with 0)
+
+
+
+
+
+
+
+
+
+
+
