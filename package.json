@@ -1,6 +1,6 @@
 {
   "name": "angular-carousel",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Generic AngularJS carousel",
   "main": "angular-carousel.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "carousel"
   ],
   "author": "Lifely <nick@lifely.nl>",
-  "license": "All rights reserved",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/lifelynl/angular-carousel/issues"
   }

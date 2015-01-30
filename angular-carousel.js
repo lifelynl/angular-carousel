@@ -1,11 +1,8 @@
-/*
- * angular-carousel.js - v1.0.1 - 2014-01-30
- * Copyright (c) 2014 Lifely
- * All right reserved
- *
- *
- *
- **/
+/**
+ * @license AngularJS v1.0.2
+ * (c) 2015 Lifely
+ * License: MIT
+ */
 
 angular.module('angular-carousel', [])
 
