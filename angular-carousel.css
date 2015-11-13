@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.1.0
+ * @license AngularJS v1.1.1
  * (c) 2015 Lifely
  * License: MIT
  */
