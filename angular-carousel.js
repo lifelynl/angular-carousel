@@ -249,7 +249,7 @@ angular.module('angular-carousel', [])
                     }
 
                     // Option: interval
-                    if(interval) {
+                    if (interval && currentCarousel.slidesCount >= 2) {
                         setNextSlideTimeout();
                     }
                 } else {
@@ -273,7 +273,7 @@ angular.module('angular-carousel', [])
 
             // Reset interval function
             var setNextSlideTimeout = function() {
-                if(!interval) return;
+                if(!interval || currentCarousel.slidesCount < 2) return;
                 if(timeoutPromise) $timeout.cancel(timeoutPromise);
                 timeoutPromise = $timeout(function() {
                     currentCarousel.next();
