@@ -3,7 +3,7 @@
 A simple very generic AngularJS carousel. Features:
 
 - Touch optimized (swipe to move between the slides)
-- Looping
+- Looping (enabled by default)
 - Timer (optional)
 - Random start (optional)
 - Select the carousel by name (using the Carousel service) and control the carousel
@@ -62,6 +62,18 @@ You can place anything inside the *.carousel-arrow* elements. These are position
         </div>
     </div>
 
+
+### Optional: disable looping
+You can disable looping by setting `ng-carousel-loop` attribute to false on element having your `ng-carousel` directive.
+
+    <div ng-carousel ng-carousel-name="example-carousel5" ng-carousel-loop="false">
+        <slidecontainer>
+            <slide>Slide 1</slide>
+            <slide>Slide 2</slide>
+            <slide>Slide 3</slide>
+            <slide>Slide 4</slide>
+        </slidecontainer>
+    </div>
 
 ### Optional: control the carousel from another place in the code
 You can control the carousel using the `Carousel` service.

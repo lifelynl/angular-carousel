@@ -18,7 +18,7 @@ angular.module('angular-carousel', [])
     //
     // Add a new carousel instance
     //
-    Carousel.add = function(slidesCount, name, scope) {
+    Carousel.add = function(slidesCount, name, scope, attrs) {
 
         // Check if name is specified
         name = name || false;
@@ -36,7 +36,7 @@ angular.module('angular-carousel', [])
         }
 
         // Create carousel instance
-        var instance = new constructor(slidesCount, scope);
+        var instance = new constructor(slidesCount, scope, attrs);
 
         // Save new carousel instance
         Carousel.instances[name] = instance;
@@ -62,9 +62,10 @@ angular.module('angular-carousel', [])
     //
     // Carousel prototype definition
     //
-    var constructor = function(slidesCount, scope) {
+    var constructor = function(slidesCount, scope, attrs) {
 
         var instance = this;
+        var looping = !(attrs.ngCarouselLoop === 'false');
 
         this.slidesCount = slidesCount;
         this.currentSlide = 0;
@@ -94,10 +95,16 @@ angular.module('angular-carousel', [])
                 wrapping = false;
 
             if(nextSlide > this.slidesCount - 1) {
-                nextSlide = 0;
-                wrapping = 'right';
+                if(looping){
+                    nextSlide = 0;
+                    wrapping = 'right';
+                }
+                else {
+                    nextSlide = this.slidesCount - 1;
+                }
+
             }
-            
+
             this.toIndex(nextSlide, wrapping);
             return nextSlide;
         };
@@ -108,8 +115,14 @@ angular.module('angular-carousel', [])
                 wrapping = false;
 
             if(previousSlide < 0) {
-                previousSlide = this.slidesCount - 1;
-                wrapping = 'left';
+                if(looping){
+                    previousSlide = this.slidesCount - 1;
+                    wrapping = 'left';
+                }
+                else {
+                    previousSlide = 0;
+                }
+
             }
             
             this.toIndex(previousSlide, wrapping);
@@ -144,6 +157,10 @@ angular.module('angular-carousel', [])
 
     var MOVE_TRESHOLD_PERCENTAGE = 25;
 
+    function createEmptySlide(){
+        return angular.element('<slide class="empty"></slide>');
+    }
+
     return {
         restrict: 'AE',
         replace: true,
@@ -151,14 +168,25 @@ angular.module('angular-carousel', [])
             ngCarouselWatch: '='
         },
         link: function(scope, element, attrs) {
-
             // Options
-            var interval = false, timeoutPromise = false, random = false, name = '';
+            var interval = false, timeoutPromise = false, random = false, name = '', looping = false;
             interval = typeof(attrs.ngCarouselTimer) !== 'undefined' && parseInt(attrs.ngCarouselTimer, 10) > 0 ? parseInt(attrs.ngCarouselTimer, 10) : false;
             random = typeof(attrs.ngCarouselRandom) !== 'undefined';
+            looping = !(attrs.ngCarouselLoop === 'false');
 
             // Function to initialize interaction with dom (should be loaded after the dom has changed)
             var slides, currentCarousel, firstSlideCopy, lastSlideCopy, slideContainer, hammer, name;
+
+            function copyFirstAndLastSlide() {
+                firstSlideCopy = angular.element(slides[0].outerHTML);
+                lastSlideCopy = angular.element(slides[slides.length - 1].outerHTML);
+            }
+
+            function makeFirstAndLastSlideEmpty() {
+                firstSlideCopy = angular.element('<slide class="empty"></slide>');
+                lastSlideCopy = angular.element('<slide class="empty"></slide>');
+            }
+
             var refreshInteractionWithDom = function() {
 
                 // Add initial classes
@@ -192,7 +220,7 @@ angular.module('angular-carousel', [])
 
                     // Create new carousel and duplicate slides
                     name = attrs.ngCarouselName;
-                    currentCarousel = Carousel.add(slides.length, attrs.ngCarouselName, scope);
+                    currentCarousel = Carousel.add(slides.length, attrs.ngCarouselName, scope, attrs);
                     angular.forEach(savedCallbacks, function(savedCallback) {
                         currentCarousel.onSlideChange(savedCallback);
                         currentCarousel.unbindOnSlideChangeCallback(0);
@@ -202,13 +230,20 @@ angular.module('angular-carousel', [])
                     var refreshVirtualSlides = function() {
                         removeOldVirtualSlides();
                         slides = element.find('slide');
-                        firstSlideCopy = angular.element(slides[0].outerHTML);
-                        lastSlideCopy = angular.element(slides[slides.length - 1].outerHTML);
+
+                        if(looping) {
+                            copyFirstAndLastSlide();
+                        }
+                        else {
+                            makeFirstAndLastSlideEmpty();
+                        }
+
                         firstSlideCopy.addClass('carousel-slide-copy');
                         lastSlideCopy.addClass('carousel-slide-copy');
                         slideContainer.append(firstSlideCopy);
                         slideContainer.prepend(lastSlideCopy);
                         slideContainer.addClass('carousel-ignore-first-slide');
+
                     };
 
                     refreshVirtualSlides();

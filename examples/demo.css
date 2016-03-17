@@ -42,7 +42,11 @@ button.demo-nav {
     color: #bbb;
 }
 
-.ng-carousel slide:nth-child(odd) {
+.ng-carousel slide.empty {
+    background: none;
+}
+
+.ng-carousel slide:not(.empty):nth-child(odd) {
   background-color: #aaa;
   color: #ccc;
 }
