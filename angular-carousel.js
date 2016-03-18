@@ -18,7 +18,7 @@ angular.module('angular-carousel', [])
     //
     // Add a new carousel instance
     //
-    Carousel.add = function(slidesCount, name, scope, attrs) {
+    Carousel.add = function(slidesCount, name, scope, options) {
 
         // Check if name is specified
         name = name || false;
@@ -36,7 +36,7 @@ angular.module('angular-carousel', [])
         }
 
         // Create carousel instance
-        var instance = new constructor(slidesCount, scope, attrs);
+        var instance = new constructor(slidesCount, scope, options);
 
         // Save new carousel instance
         Carousel.instances[name] = instance;
@@ -62,10 +62,11 @@ angular.module('angular-carousel', [])
     //
     // Carousel prototype definition
     //
-    var constructor = function(slidesCount, scope, attrs) {
+    var constructor = function(slidesCount, scope, options) {
+        options = options || {};
+        if (typeof options.looping === 'undefined') options.looping = true;
 
         var instance = this;
-        var looping = !(attrs.ngCarouselLoop === 'false');
 
         this.slidesCount = slidesCount;
         this.currentSlide = 0;
@@ -95,7 +96,7 @@ angular.module('angular-carousel', [])
                 wrapping = false;
 
             if(nextSlide > this.slidesCount - 1) {
-                if(looping){
+                if(options.looping){
                     nextSlide = 0;
                     wrapping = 'right';
                 }
@@ -115,7 +116,7 @@ angular.module('angular-carousel', [])
                 wrapping = false;
 
             if(previousSlide < 0) {
-                if(looping){
+                if(options.looping){
                     previousSlide = this.slidesCount - 1;
                     wrapping = 'left';
                 }
@@ -124,7 +125,7 @@ angular.module('angular-carousel', [])
                 }
 
             }
-            
+
             this.toIndex(previousSlide, wrapping);
             return previousSlide;
         };
@@ -220,7 +221,9 @@ angular.module('angular-carousel', [])
 
                     // Create new carousel and duplicate slides
                     name = attrs.ngCarouselName;
-                    currentCarousel = Carousel.add(slides.length, attrs.ngCarouselName, scope, attrs);
+                    currentCarousel = Carousel.add(slides.length, attrs.ngCarouselName, scope, {
+                        looping: looping
+                    });
                     angular.forEach(savedCallbacks, function(savedCallback) {
                         currentCarousel.onSlideChange(savedCallback);
                         currentCarousel.unbindOnSlideChangeCallback(0);
