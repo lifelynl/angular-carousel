@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.2.0
+ * @license AngularJS v1.2.1
  * (c) 2015 Lifely
  * License: MIT
  */
@@ -215,80 +215,82 @@ angular.module('angular-carousel', [])
                 removeOldVirtualSlides();
                 slides = element.find('slide');
 
-                // Add slides before and after the current slides
-                if(slides.length > 0) {
+                // Create new carousel and duplicate slides
+                name = attrs.ngCarouselName;
+                currentCarousel = Carousel.add(slides.length, attrs.ngCarouselName, scope, attrs);
+                angular.forEach(savedCallbacks, function(savedCallback) {
+                    currentCarousel.onSlideChange(savedCallback);
+                    currentCarousel.unbindOnSlideChangeCallback(0);
+                });
 
-                    // Create new carousel and duplicate slides
-                    name = attrs.ngCarouselName;
-                    currentCarousel = Carousel.add(slides.length, attrs.ngCarouselName, scope, attrs);
-                    angular.forEach(savedCallbacks, function(savedCallback) {
-                        currentCarousel.onSlideChange(savedCallback);
-                        currentCarousel.unbindOnSlideChangeCallback(0);
+                // Duplicate first and last slide (for infinite effect)
+                var refreshVirtualSlides = function() {
+                    removeOldVirtualSlides();
+
+                    if(slides.length < 1){
+                        return;
+                    }
+
+                    slides = element.find('slide');
+
+                    if(looping) {
+                        copyFirstAndLastSlide();
+                    }
+                    else {
+                        makeFirstAndLastSlideEmpty();
+                    }
+
+                    firstSlideCopy.addClass('carousel-slide-copy');
+                    lastSlideCopy.addClass('carousel-slide-copy');
+                    slideContainer.append(firstSlideCopy);
+                    slideContainer.prepend(lastSlideCopy);
+                    slideContainer.addClass('carousel-ignore-first-slide');
+
+                };
+
+                refreshVirtualSlides();
+
+                // On slide change, move the slideContainer
+                var onSlideChangeCallback = function(slideIndex, wrapping) {
+                    var newSlideIndex = slideIndex + 1; // because the first slide doesn't count
+
+                    if(wrapping === 'left') {
+                        newSlideIndex = 0; // first slide
+                    } else if(wrapping === 'right') {
+                        newSlideIndex = slides.length + 1; // last slide
+                    }
+
+                    move(newSlideIndex, true, function() {
+                        if(wrapping === 'left') {
+                            move(slides.length, false);
+                        } else if(wrapping === 'right') {
+                            move(1, false);
+                        }
                     });
 
-                    // Duplicate first and last slide (for infinite effect)
-                    var refreshVirtualSlides = function() {
-                        removeOldVirtualSlides();
-                        slides = element.find('slide');
-
-                        if(looping) {
-                            copyFirstAndLastSlide();
-                        }
-                        else {
-                            makeFirstAndLastSlideEmpty();
-                        }
-
-                        firstSlideCopy.addClass('carousel-slide-copy');
-                        lastSlideCopy.addClass('carousel-slide-copy');
-                        slideContainer.append(firstSlideCopy);
-                        slideContainer.prepend(lastSlideCopy);
-                        slideContainer.addClass('carousel-ignore-first-slide');
-
-                    };
-
+                    setNextSlideTimeout();
                     refreshVirtualSlides();
+                };
 
-                    // On slide change, move the slideContainer
-                    var onSlideChangeCallback = function(slideIndex, wrapping) {
-                        var newSlideIndex = slideIndex + 1; // because the first slide doesn't count
-
-                        if(wrapping === 'left') {
-                            newSlideIndex = 0; // first slide
-                        } else if(wrapping === 'right') {
-                            newSlideIndex = slides.length + 1; // last slide
-                        }
-
-                        move(newSlideIndex, true, function() {
-                            if(wrapping === 'left') {
-                                move(slides.length, false);
-                            } else if(wrapping === 'right') {
-                                move(1, false);
-                            }
-                        });
-
-                        setNextSlideTimeout();
-                        refreshVirtualSlides();
-                    };
+                if(currentCarousel.onSlideChange){
                     currentCarousel.onSlideChange(onSlideChangeCallback);
+                }
 
-                    // If new slide was out of range, move to the new assigned one
-                    if(savedSlideIndex !== false && currentCarousel.currentSlide !== savedSlideIndex) {
-                        onSlideChangeCallback(currentCarousel.currentSlide, false);
-                        currentCarousel.toIndex(savedSlideIndex);
-                    }
+                // If new slide was out of range, move to the new assigned one
+                if(savedSlideIndex !== false && currentCarousel.currentSlide !== savedSlideIndex) {
+                    onSlideChangeCallback(currentCarousel.currentSlide, false);
+                    currentCarousel.toIndex(savedSlideIndex);
+                }
 
-                    // Option: random
-                    if(random) {
-                        var randomSlide = Math.floor(Math.random() * currentCarousel.slidesCount);
-                        currentCarousel.toIndex(randomSlide);
-                    }
+                // Option: random
+                if(random) {
+                    var randomSlide = Math.floor(Math.random() * currentCarousel.slidesCount);
+                    currentCarousel.toIndex(randomSlide);
+                }
 
-                    // Option: interval
-                    if (interval && currentCarousel.slidesCount >= 2) {
-                        setNextSlideTimeout();
-                    }
-                } else {
-                    console.log('ng-carousel error: No slides found')
+                // Option: interval
+                if (interval && currentCarousel.slidesCount >= 2) {
+                    setNextSlideTimeout();
                 }
 
                 // Initialize Hammer

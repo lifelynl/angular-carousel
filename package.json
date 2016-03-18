@@ -1,6 +1,6 @@
 {
   "name": "angular-carousel",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Generic AngularJS carousel",
   "main": "angular-carousel.js",
   "scripts": {

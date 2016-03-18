@@ -88,7 +88,7 @@
 
         <section>
             <h2>Carousel with looping disabled</h2>
-            <div ng-carousel ng-carousel-name="example-carousel5" ng-carousel-loop="false">
+            <div ng-carousel ng-carousel-name="example-carousel5" ng-carousel-loop="true">
                 <slidecontainer>
                     <slide>Slide 1</slide>
                     <slide>Slide 2</slide>
@@ -97,6 +97,23 @@
                 </slidecontainer>
             </div>
         </section>
+
+        <section>
+            <h2>Carousel with adding/removing slides via ng-repeat</h2>
+
+            <p>
+                <button ng-click="addSlide(slideTitle)">Add</button>
+                <button ng-click="removeSlide(slideTitle)">Remove</button>
+                <input ng-model="slideTitle"/>
+            </p>
+
+            <div ng-carousel ng-carousel-name="example-carousel5" ng-carousel-watch="dynamicSlides" ng-carousel-loop="true">
+                <slidecontainer>
+                    <slide ng-repeat="slide in dynamicSlides">{{slide}}</slide>
+                </slidecontainer>
+            </div>
+        </section>
+
 
     </article>
 

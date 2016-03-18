@@ -11,7 +11,9 @@ gulp.task('clean', function(){
 gulp.task('minify-css', function() {
     gulp
         .src('angular-carousel.css')
-        .pipe(cleanCSS())
+        .pipe(cleanCSS({
+            keepSpecialComments: '*'
+        }))
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest('.'));
 });
@@ -19,7 +21,9 @@ gulp.task('minify-css', function() {
 gulp.task('minify-js', function() {
     gulp
         .src('angular-carousel.js')
-        .pipe(uglify())
+        .pipe(uglify({
+            preserveComments: 'license'
+        }))
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest('.'));
 });
