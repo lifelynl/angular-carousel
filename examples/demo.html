@@ -98,12 +98,31 @@
             </div>
         </section>
 
+        <section>
+            <h2>Carousel with adding/removing slides via ng-repeat</h2>
+
+            <p>
+                <button ng-click="addSlide(slideTitle)">Add</button>
+                <button ng-click="removeSlide(slideTitle)">Remove</button>
+                <input ng-model="slideTitle"/>
+            </p>
+
+            <div ng-carousel ng-carousel-name="example-carousel5" ng-carousel-watch="dynamicSlides">
+                <slidecontainer>
+                    <slide ng-repeat="slide in dynamicSlides">{{slide}}</slide>
+                </slidecontainer>
+            </div>
+        </section>
+
+
     </article>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
     <script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
 
     <script src="../angular-carousel.js"></script>
-    <script src="demo.js"></script>
+    <script src="demo.js"></script>Add  Remove
+    H
+
 </body>
 </html>
