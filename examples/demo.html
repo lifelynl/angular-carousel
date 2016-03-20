@@ -88,7 +88,7 @@
 
         <section>
             <h2>Carousel with looping disabled</h2>
-            <div ng-carousel ng-carousel-name="example-carousel5" ng-carousel-loop="true">
+            <div ng-carousel ng-carousel-name="example-carousel5" ng-carousel-loop="false">
                 <slidecontainer>
                     <slide>Slide 1</slide>
                     <slide>Slide 2</slide>
@@ -107,7 +107,7 @@
                 <input ng-model="slideTitle"/>
             </p>
 
-            <div ng-carousel ng-carousel-name="example-carousel5" ng-carousel-watch="dynamicSlides" ng-carousel-loop="true">
+            <div ng-carousel ng-carousel-name="example-carousel5" ng-carousel-watch="dynamicSlides">
                 <slidecontainer>
                     <slide ng-repeat="slide in dynamicSlides">{{slide}}</slide>
                 </slidecontainer>
@@ -121,6 +121,8 @@
     <script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
 
     <script src="../angular-carousel.js"></script>
-    <script src="demo.js"></script>
+    <script src="demo.js"></script>Add  Remove
+    H
+
 </body>
 </html>
