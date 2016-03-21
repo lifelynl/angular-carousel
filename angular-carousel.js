@@ -158,10 +158,6 @@ angular.module('angular-carousel', [])
 
     var MOVE_TRESHOLD_PERCENTAGE = 25;
 
-    function createEmptySlide(){
-        return angular.element('<slide class="empty"></slide>');
-    }
-
     return {
         restrict: 'AE',
         replace: true,
