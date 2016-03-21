@@ -172,7 +172,7 @@ angular.module('angular-carousel', [])
             looping = !(attrs.ngCarouselLoop === 'false');
 
             // Function to initialize interaction with dom (should be loaded after the dom has changed)
-            var slides, currentCarousel, firstSlideCopy, lastSlideCopy, slideContainer, hammer, name;
+            var slides, currentCarousel, firstSlideCopy, lastSlideCopy, slideContainer, hammer;
 
             function copyFirstAndLastSlide() {
                 firstSlideCopy = angular.element(slides[0].outerHTML);
