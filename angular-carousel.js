@@ -173,7 +173,7 @@ angular.module('angular-carousel', [])
             var interval = false, timeoutPromise = false, random = false, name = '', looping = false;
             interval = typeof(attrs.ngCarouselTimer) !== 'undefined' && parseInt(attrs.ngCarouselTimer, 10) > 0 ? parseInt(attrs.ngCarouselTimer, 10) : false;
             random = typeof(attrs.ngCarouselRandom) !== 'undefined';
-            looping = !(attrs.ngCarouselLoop === 'false');
+            looping = (attrs.ngCarouselLoop !== 'false');
 
             // Function to initialize interaction with dom (should be loaded after the dom has changed)
             var slides, currentCarousel, firstSlideCopy, lastSlideCopy, slideContainer, hammer, name;
