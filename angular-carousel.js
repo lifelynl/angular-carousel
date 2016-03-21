@@ -141,7 +141,7 @@ angular.module('angular-carousel', [])
             if(typeof(this.onSlideChangeCallbacks[index]) === 'undefined') return;
             this.onSlideChangeCallbacks.splice(index, 1);
         };
-    }
+    };
 
     return Carousel;
 
