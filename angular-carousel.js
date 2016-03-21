@@ -64,7 +64,9 @@ angular.module('angular-carousel', [])
     //
     var constructor = function(slidesCount, scope, options) {
         options = options || {};
-        if (typeof options.looping === 'undefined') options.looping = true;
+        if (typeof options.looping === 'undefined'){
+            options.looping = true;
+        }
 
         var instance = this;
 
@@ -138,7 +140,9 @@ angular.module('angular-carousel', [])
 
         // Operation: unbind on slide change callback
         this.unbindOnSlideChangeCallback = function(index) {
-            if(typeof(this.onSlideChangeCallbacks[index]) === 'undefined') return;
+            if(typeof(this.onSlideChangeCallbacks[index]) === 'undefined'){
+                return;
+            }
             this.onSlideChangeCallbacks.splice(index, 1);
         };
     }
@@ -173,7 +177,7 @@ angular.module('angular-carousel', [])
             var interval = false, timeoutPromise = false, random = false, name = '', looping = false;
             interval = typeof(attrs.ngCarouselTimer) !== 'undefined' && parseInt(attrs.ngCarouselTimer, 10) > 0 ? parseInt(attrs.ngCarouselTimer, 10) : false;
             random = typeof(attrs.ngCarouselRandom) !== 'undefined';
-            looping = !(attrs.ngCarouselLoop === 'false');
+            looping = (attrs.ngCarouselLoop !== 'false');
 
             // Function to initialize interaction with dom (should be loaded after the dom has changed)
             var slides, currentCarousel, firstSlideCopy, lastSlideCopy, slideContainer, hammer, name;
@@ -209,7 +213,9 @@ angular.module('angular-carousel', [])
                 // Remove old duplicated slides
                 var removeOldVirtualSlides = function() {
                     var oldSlides = angular.element(element[0].querySelectorAll('.carousel-slide-copy'));
-                    if(oldSlides.length > 0) oldSlides.remove();
+                    if(oldSlides.length > 0) {
+                        oldSlides.remove();
+                    }
                 };
 
                 // Find slides
@@ -301,7 +307,9 @@ angular.module('angular-carousel', [])
 
                     // On pan left/right
                     hammer.on("panleft panright", function(ev) {
-                        if(!ev.isFinal) carouselDrag(ev.deltaX);
+                        if(!ev.isFinal) {
+                            carouselDrag(ev.deltaX);
+                        }
                     });
                 } else {
                     console.log('ng-carousel error: No slidecontainer found')
@@ -311,7 +319,9 @@ angular.module('angular-carousel', [])
 
             // Reset interval function
             var setNextSlideTimeout = function() {
-                if(!interval || currentCarousel.slidesCount < 2) return;
+                if(!interval || currentCarousel.slidesCount < 2) {
+                    return;
+                }
                 if(timeoutPromise) $timeout.cancel(timeoutPromise);
                 timeoutPromise = $timeout(function() {
                     currentCarousel.next();
@@ -337,7 +347,9 @@ angular.module('angular-carousel', [])
 
                 if(animate) {
                     slideContainer.on('transitionend oTransitionEnd webkitTransitionEnd', function() {
-                        if(typeof transitionEndCallback === 'function') transitionEndCallback();
+                        if(typeof transitionEndCallback === 'function') {
+                            transitionEndCallback();
+                        }
                         slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
                         move(currentCarousel.currentSlide + 1, false);
                     });
@@ -378,7 +390,9 @@ angular.module('angular-carousel', [])
 
             //
             element.on('mouseover', function() {
-                if(timeoutPromise) $timeout.cancel(timeoutPromise);
+                if(timeoutPromise) {
+                    $timeout.cancel(timeoutPromise);
+                }
             });
             element.on('mouseout', setNextSlideTimeout);
 
