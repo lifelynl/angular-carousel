@@ -141,7 +141,7 @@ angular.module('angular-carousel', [])
             if(typeof(this.onSlideChangeCallbacks[index]) === 'undefined') return;
             this.onSlideChangeCallbacks.splice(index, 1);
         };
-    }
+    };
 
     return Carousel;
 
@@ -158,10 +158,6 @@ angular.module('angular-carousel', [])
 
     var MOVE_TRESHOLD_PERCENTAGE = 25;
 
-    function createEmptySlide(){
-        return angular.element('<slide class="empty"></slide>');
-    }
-
     return {
         restrict: 'AE',
         replace: true,
@@ -176,7 +172,7 @@ angular.module('angular-carousel', [])
             looping = !(attrs.ngCarouselLoop === 'false');
 
             // Function to initialize interaction with dom (should be loaded after the dom has changed)
-            var slides, currentCarousel, firstSlideCopy, lastSlideCopy, slideContainer, hammer, name;
+            var slides, currentCarousel, firstSlideCopy, lastSlideCopy, slideContainer, hammer;
 
             function copyFirstAndLastSlide() {
                 firstSlideCopy = angular.element(slides[0].outerHTML);
