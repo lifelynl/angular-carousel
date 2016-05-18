@@ -174,7 +174,7 @@ angular.module('angular-carousel', [])
             interval = typeof(attrs.ngCarouselTimer) !== 'undefined' && parseInt(attrs.ngCarouselTimer, 10) > 0 ? parseInt(attrs.ngCarouselTimer, 10) : false;
             random = typeof(attrs.ngCarouselRandom) !== 'undefined';
             looping = !(attrs.ngCarouselLoop === 'false');
-	        pan = !(attrs.ngCarouselPan === 'false');
+            pan = !(attrs.ngCarouselPan === 'false');
 
             // Function to initialize interaction with dom (should be loaded after the dom has changed)
             var slides, currentCarousel, firstSlideCopy, lastSlideCopy, slideContainer, hammer, name;
@@ -301,10 +301,10 @@ angular.module('angular-carousel', [])
                     hammer.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 0 }));
 
                     // On pan left/right
-	                if (pan === true)
-	                    hammer.on("panleft panright", function(ev) {
-	                        if(!ev.isFinal) carouselDrag(ev.deltaX);
-	                    });
+                    if (pan === true)
+                        hammer.on("panleft panright", function(ev) {
+                            if(!ev.isFinal) carouselDrag(ev.deltaX);
+                        });
                 } else {
                     console.log('ng-carousel error: No slidecontainer found')
                 }
