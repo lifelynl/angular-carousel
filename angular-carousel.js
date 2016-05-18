@@ -286,6 +286,11 @@ angular.module('angular-carousel', [])
                         currentCarousel.toIndex(randomSlide);
                     }
 
+                    // Option: startSlide
+                    if(attrs.ngCarouselStartSlide) {
+                        currentCarousel.toIndex(attrs.ngCarouselStartSlide);
+                    }
+
                     // Option: interval
                     if (interval && currentCarousel.slidesCount >= 2) {
                         setNextSlideTimeout();
