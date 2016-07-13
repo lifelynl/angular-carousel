@@ -220,8 +220,13 @@ angular.module('angular-carousel', [])
                 if(slides.length > 0) {
 
                     // Create new carousel and duplicate slides
-                    name = attrs.ngCarouselName;
-                    currentCarousel = Carousel.add(slides.length, attrs.ngCarouselName, scope, {
+                    if(attrs.ngCarouselName != undefined){
+                        name = attrs.ngCarouselName;
+                    }
+                    else if(attrs.ngCarouselExpression != undefined) {
+                        name = scope.$eval(attrs.ngCarouselExpression);
+                    }
+                    currentCarousel = Carousel.add(slides.length, name, scope, {
                         looping: looping
                     });
                     angular.forEach(savedCallbacks, function(savedCallback) {
