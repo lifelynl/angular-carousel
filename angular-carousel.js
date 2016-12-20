@@ -397,8 +397,8 @@ angular.module('angular-carousel', [])
             scope.$on('$destroy', function() {
                 $timeout.cancel(refreshInteractionWithDomTimer);
                 element.off('mouseover mouseout');
-                element.off(pressEvent);
-                element.off(releaseEvent);
+                element.off(pressEvent, carouselPress);
+                element.off(releaseEvent, carouselRelease);
                 slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
                 currentCarousel.onSlideChangeCallbacks = [];
                 Carousel.remove(name);
