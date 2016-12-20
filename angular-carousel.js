@@ -151,7 +151,7 @@ angular.module('angular-carousel', [])
 //  This directive makes an element with class 'ng-carousel' interactive
 //  using own UI logic and HammerJS
 //
-.directive('ngCarousel', ['Carousel', '$compile', '$document', '$timeout', function(Carousel, $compile, $document, $timeout) {
+.directive('ngCarousel', ['Carousel', '$timeout', function(Carousel, $timeout) {
     function isTouchDevice() {
         return 'ontouchstart' in document.documentElement;
     }
@@ -373,8 +373,8 @@ angular.module('angular-carousel', [])
             // On release
             var pressEvent = isTouchDevice() ? 'touchstart' : 'mousedown';
             var releaseEvent = isTouchDevice() ? 'touchend' : 'mouseup';
-            $document.on(pressEvent, carouselPress);
-            $document.on(releaseEvent, carouselRelease);
+            element.on(pressEvent, carouselPress);
+            element.on(releaseEvent, carouselRelease);
 
             //
             element.on('mouseover', function() {
@@ -397,8 +397,8 @@ angular.module('angular-carousel', [])
             scope.$on('$destroy', function() {
                 $timeout.cancel(refreshInteractionWithDomTimer);
                 element.off('mouseover mouseout');
-                $document.off(pressEvent);
-                $document.off(releaseEvent);
+                element.off(pressEvent, carouselPress);
+                element.off(releaseEvent, carouselRelease);
                 slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
                 currentCarousel.onSlideChangeCallbacks = [];
                 Carousel.remove(name);
