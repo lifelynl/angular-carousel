@@ -396,10 +396,14 @@ angular.module('angular-carousel', [])
             // Destroy all binded events on scope destroy
             scope.$on('$destroy', function() {
                 $timeout.cancel(refreshInteractionWithDomTimer);
-                element.off('mouseover mouseout');
+				if(element) {
+					element.off('mouseover mouseout');
+				}
                 $document.off(pressEvent);
-                $document.off(releaseEvent);
-                slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
+				$document.off(releaseEvent);
+				if(slideContainer) {
+					slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
+				}
                 currentCarousel.onSlideChangeCallbacks = [];
                 Carousel.remove(name);
             });
