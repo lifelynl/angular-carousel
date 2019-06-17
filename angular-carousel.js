@@ -404,7 +404,9 @@ angular.module('angular-carousel', [])
 				if(slideContainer) {
 					slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
 				}
-                currentCarousel.onSlideChangeCallbacks = [];
+				if(currentCarousel) {
+					currentCarousel.onSlideChangeCallbacks = [];
+				}
                 Carousel.remove(name);
             });
 
