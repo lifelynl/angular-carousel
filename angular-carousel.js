@@ -408,7 +408,7 @@ angular.module('angular-carousel', [])
 				if(slideContainer) {
 					slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
 				}
-				if(currentCarousel) {
+				if(currentCarousel && typeof currentCarousel === "object") {
 					currentCarousel.onSlideChangeCallbacks = [];
 				}
                 Carousel.remove(name);
