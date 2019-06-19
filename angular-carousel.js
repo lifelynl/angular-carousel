@@ -353,7 +353,9 @@ angular.module('angular-carousel', [])
                 move(currentCarousel.currentSlide + 1 - deltaXFactor, false);
             };
             var carouselPress = function() {
-                width = slideContainer[0].offsetWidth;
+				if(slideContainer && slideContainer[0]) {
+					width = slideContainer[0].offsetWidth;
+				}
             };
             var carouselRelease = function() {
                 if(Math.abs(deltaXFactor) > MOVE_TRESHOLD_PERCENTAGE / 100) {
