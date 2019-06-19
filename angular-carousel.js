@@ -271,8 +271,10 @@ angular.module('angular-carousel', [])
 
                         setNextSlideTimeout();
                         refreshVirtualSlides();
-                    };
-                    currentCarousel.onSlideChange(onSlideChangeCallback);
+					};
+					if(currentCarousel && currentCarousel.onSlideChange) {
+						currentCarousel.onSlideChange(onSlideChangeCallback);
+					}
 
                     // If new slide was out of range, move to the new assigned one
                     if(savedSlideIndex !== false && currentCarousel.currentSlide !== savedSlideIndex) {
