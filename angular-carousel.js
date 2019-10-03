@@ -166,7 +166,8 @@ angular.module('angular-carousel', [])
         restrict: 'AE',
         replace: true,
         scope: {
-            ngCarouselWatch: '='
+			ngCarouselWatch: '=',
+			ngCarousalNoDrag: '='
         },
         link: function(scope, element, attrs) {
             // Options
@@ -271,8 +272,10 @@ angular.module('angular-carousel', [])
 
                         setNextSlideTimeout();
                         refreshVirtualSlides();
-                    };
-                    currentCarousel.onSlideChange(onSlideChangeCallback);
+					};
+					if(currentCarousel && currentCarousel.onSlideChange) {
+						currentCarousel.onSlideChange(onSlideChangeCallback);
+					}
 
                     // If new slide was out of range, move to the new assigned one
                     if(savedSlideIndex !== false && currentCarousel.currentSlide !== savedSlideIndex) {
@@ -301,7 +304,7 @@ angular.module('angular-carousel', [])
 
                     // On pan left/right
                     hammer.on("panleft panright", function(ev) {
-                        if(!ev.isFinal) carouselDrag(ev.deltaX);
+                        if(!ev.isFinal && attrs.ngCarousalNoDrag !== 'true') carouselDrag(ev.deltaX);
                     });
                 } else {
                     console.log('ng-carousel error: No slidecontainer found')
@@ -353,7 +356,9 @@ angular.module('angular-carousel', [])
                 move(currentCarousel.currentSlide + 1 - deltaXFactor, false);
             };
             var carouselPress = function() {
-                width = slideContainer[0].offsetWidth;
+				if(slideContainer && slideContainer[0]) {
+					width = slideContainer[0].offsetWidth;
+				}
             };
             var carouselRelease = function() {
                 if(Math.abs(deltaXFactor) > MOVE_TRESHOLD_PERCENTAGE / 100) {
@@ -396,11 +401,17 @@ angular.module('angular-carousel', [])
             // Destroy all binded events on scope destroy
             scope.$on('$destroy', function() {
                 $timeout.cancel(refreshInteractionWithDomTimer);
-                element.off('mouseover mouseout');
+				if(element) {
+					element.off('mouseover mouseout');
+				}
                 $document.off(pressEvent);
-                $document.off(releaseEvent);
-                slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
-                currentCarousel.onSlideChangeCallbacks = [];
+				$document.off(releaseEvent);
+				if(slideContainer) {
+					slideContainer.off('transitionend oTransitionEnd webkitTransitionEnd');
+				}
+				if(currentCarousel && typeof currentCarousel === "object") {
+					currentCarousel.onSlideChangeCallbacks = [];
+				}
                 Carousel.remove(name);
             });
 
