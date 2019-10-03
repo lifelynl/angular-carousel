@@ -166,7 +166,8 @@ angular.module('angular-carousel', [])
         restrict: 'AE',
         replace: true,
         scope: {
-            ngCarouselWatch: '='
+			ngCarouselWatch: '=',
+			ngCarousalNoDrag: '='
         },
         link: function(scope, element, attrs) {
             // Options
@@ -303,7 +304,7 @@ angular.module('angular-carousel', [])
 
                     // On pan left/right
                     hammer.on("panleft panright", function(ev) {
-                        if(!ev.isFinal) carouselDrag(ev.deltaX);
+                        if(!ev.isFinal && attrs.ngCarousalNoDrag !== 'true') carouselDrag(ev.deltaX);
                     });
                 } else {
                     console.log('ng-carousel error: No slidecontainer found')
