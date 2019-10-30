@@ -156,7 +156,7 @@ angular.module('angular-carousel', [])
         return 'ontouchstart' in document.documentElement;
     }
 
-    var MOVE_TRESHOLD_PERCENTAGE = 25;
+    var MOVE_TRESHOLD_PERCENTAGE = 5;
 
     function createEmptySlide(){
         return angular.element('<slide class="empty"></slide>');
