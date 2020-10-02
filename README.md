@@ -1,4 +1,4 @@
-# angular-carousel.js 1.2.0
+# angular-carousel.js 1.2.9
 
 A simple very generic AngularJS carousel. Features:
 
